@@ -22,6 +22,9 @@ COPY ./CDR.Register.IdentityServer/. /app/CDR.Register.IdentityServer
 COPY ./CDR.Register.API.Gateway.mTLS/. /app/CDR.Register.API.Gateway.mTLS
 COPY ./CDR.Register.API.Gateway.TLS/. /app/CDR.Register.API.Gateway.TLS
 
+COPY ./build/paypal_ca.crt /usr/local/share/ca-certificates/paypal_ca.crt
+RUN update-ca-certificates
+
 WORKDIR /app/CDR.Register.Admin.API
 RUN dotnet publish -c Release -o /app/publish/admin
 WORKDIR /app/CDR.Register.Discovery.API
@@ -56,6 +59,8 @@ RUN apt-get update && apt-get install -y supervisor
 RUN apt-get update && apt-get install -y sudo
 
 RUN sudo cp ./gateway-mtls/Certificates/ca.crt /usr/local/share/ca-certificates/ca.crt
+
+COPY ./build/paypal_ca.crt /usr/local/share/ca-certificates/paypal_ca.crt
 
 RUN sudo update-ca-certificates
 
